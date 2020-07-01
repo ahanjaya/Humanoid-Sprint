@@ -1,0 +1,12 @@
+<launch>
+    <include file="$(find usb_cam)/launch/webcam.launch"/>
+
+    <node name="sprint_params"  pkg="robot_params"        type="sprint_server.py" />
+    <node name="dyn_sprint_p"   pkg="dynamic_reconfigure" type="dynparam"      args="load /sprint_params/player $(find robot_params)/data/sprint_player_p.yaml" />
+    <!-- <node name="dynamic_sprint_v" pkg="dynamic_reconfigure" type="dynparam" args="load /sprint_params/vision /home/barelangfc/catkin_ws/dataset/sprint_vision_p.yaml" /> -->
+
+    <node name="motion_bridge" pkg="motion_bridge"         type="motion_bridge.py" />
+    <node name="sprint_aruco"  pkg="sprint_aruco_detector" type="sprint_aruco_detector.py" />
+    <node name="sprint_player" pkg="sprint_player"         type="sprint_player.py"  output="screen" />
+    
+</launch>
