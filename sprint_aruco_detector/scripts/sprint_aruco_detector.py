@@ -50,17 +50,22 @@ class Vision:
             corners, ids, rejectedImgPoints = aruco.detectMarkers(gray_img, self.aruco_dict, parameters=self.aruco_params)
             cx, cy, size = -1, -1, -1
 
-            if len(corners) > 0 and ids[0,0] == 1:
-                M = cv2.moments(corners[0])
-                cx   = int(M["m10"] / M["m00"])
-                cy   = int(M["m01"] / M["m00"])
-                size = int(M["m00"])
-                
-                if self.debug:
-                    rospy.loginfo("[Vision] ID : {}, Pos: {},{}".format(ids[0,0], cx, cy))
+            # if len(corners) > 0 and ids[0,0] == 1:
 
-                cv2.circle(rgb_img, (cx,cy), 5, (0, 0, 255), -1)
-                aruco.drawDetectedMarkers(rgb_img, corners, ids)
+            if np.all(ids != None):
+                for i in range(0, ids.size):
+                    if ids[i,0] == 85:
+                        M = cv2.moments(corners[i])
+                        cx   = int(M["m10"] / M["m00"])
+                        cy   = int(M["m01"] / M["m00"])
+                        size = int(M["m00"])
+                        
+                        if self.debug:
+                            rospy.loginfo("[Vision] ID : {}, Pos: {},{}".format(ids[0,0], cx, cy))
+
+                        cv2.circle(rgb_img, (cx,cy), 5, (0, 0, 255), -1)
+                        # aruco.drawDetectedMarkers(rgb_img, corners, ids)
+                        break
 
             # arcuo coordinates
             self.aruco_data.x = cx

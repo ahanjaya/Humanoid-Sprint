@@ -48,7 +48,7 @@ class Player:
 
 		# Subscriber
 		rospy.Subscriber("/sprint/marker/position", ArucoData,	self.marker_pos_callback)
-		rospy.Subscriber("/button/state", 			Button, 	self.button_callback)
+		rospy.Subscriber("/button/state", 			Button,     self.button_callback)
 
         # Publisher
 		self.walk_pub    = rospy.Publisher("/walk/velocity", Twist,    queue_size=1)

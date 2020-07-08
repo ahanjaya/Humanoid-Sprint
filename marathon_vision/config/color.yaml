@@ -1,0 +1,20 @@
+Blue:
+  Dilate: 0
+  Erode: 0
+  H_Max: 0
+  H_Min: 0
+  S_Max: 0
+  S_Min: 0
+  Size: 10000
+  V_Max: 0
+  V_Min: 0
+Yellow:
+  Dilate: 0
+  Erode: 0
+  H_Max: 255
+  H_Min: 0
+  S_Max: 255
+  S_Min: 67
+  Size: 50000
+  V_Max: 255
+  V_Min: 0
