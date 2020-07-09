@@ -4,9 +4,11 @@
     <node name="marathon_params"  pkg="robot_params"        type="marathon_server.py" />
     <node name="dyn_marathon_p"   pkg="dynamic_reconfigure" type="dynparam"      args="load /marathon_params/player $(find robot_params)/data/marathon_player_p.yaml" />
 
-    <node name="motion_bridge"   pkg="motion_bridge"        type="motion_bridge.py" />
-    <node name="marathon_marker" pkg="marathon_vision"      type="marathon_marker.py"  output="screen"/>
-    <node name="marathon_line"   pkg="marathon_vision"      type="marathon_line.py"    output="screen"/>
-    <node name="marathon_player" pkg="marathon_player"      type="marathon_player.py"  output="screen" />
+    <!-- <node name="motion_bridge"   pkg="motion_bridge"        type="motion_bridge.py" /> -->
+    <!-- <node name="marathon_marker" pkg="marathon_vision"      type="marathon_marker.py"  output="screen"/> -->
+    
+    <node name="marathon_marker" pkg="marathon_vision"      type="marathon_mobilenet.py"  output="screen"/>
+    <!-- <node name="marathon_line"   pkg="marathon_vision"      type="marathon_line.py"    output="screen"/> -->
+    <!-- <node name="marathon_player" pkg="marathon_player"      type="marathon_player.py"  output="screen" /> -->
     
 </launch>

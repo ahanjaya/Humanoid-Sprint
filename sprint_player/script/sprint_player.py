@@ -17,6 +17,8 @@ class Player:
 		self.main_rate	= rospy.Rate(self.freq)
 		self.frame_w    = rospy.get_param("/usb_cam/image_width")
 		self.frame_h    = rospy.get_param("/usb_cam/image_height")
+		# self.frame_w      = rospy.get_param("/uvc_webcam/width")
+		# self.frame_h      = rospy.get_param("/uvc_webcam/height")
 		
 		self.init_state = True
 		self.state 		= 'initial'

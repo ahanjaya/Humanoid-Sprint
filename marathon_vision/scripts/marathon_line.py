@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import os
 import cv2
@@ -8,18 +8,21 @@ import rospkg
 import numpy as np
 from sensor_msgs.msg import Image
 from geometry_msgs.msg import Pose2D
-from cv_bridge import CvBridge, CvBridgeError
+# from cv_bridge import CvBridge, CvBridgeError
 
 class Line:
     def __init__(self):
-        rospy.init_node('srospy.loginfo_aruco')
+        rospy.init_node('marathon_line')
         rospy.loginfo("[Line] Martahon Vision - Running")
 
         # Config File
         self.rospack    = rospkg.RosPack()
         self.cfg_file   = self.rospack.get_path("marathon_vision") + "/config/color.yaml"
         
-        self.bridge     = CvBridge()
+        self.python2 = False
+        if self.python2:
+            self.bridge = CvBridge()
+
         self.frame_w    = rospy.get_param("/usb_cam/image_width")
         self.frame_h    = rospy.get_param("/usb_cam/image_height")
         self.source_img = np.zeros((self.frame_w, self.frame_h, 3), np.uint8)
@@ -40,10 +43,18 @@ class Line:
         
 
     def img_callback(self, msg):
-        try:
-            self.source_img = self.bridge.imgmsg_to_cv2(msg, "bgr8")
-        except CvBridgeError as e:
-            rospy.loginfo(e)
+        if self.python2:
+            try:
+                self.source_img = self.bridge.imgmsg_to_cv2(msg, "bgr8")
+            except CvBridgeError as e:
+                rospy.loginfo(e)
+        else:
+            dt  = np.dtype(np.uint8)
+            dt  = dt.newbyteorder('>')
+            arr = np.frombuffer(msg.data, dtype=dt)
+
+            arr = np.reshape(arr, (self.frame_h, self.frame_w ,3))
+            self.source_img = cv2.cvtColor(arr, cv2.COLOR_BGR2RGB)
 
     def update_parameter(self, x):
         pass
@@ -182,8 +193,8 @@ class Line:
                         box_x, box_y, box_w, box_h = cv2.boundingRect(cnt)
                         # filter rectangle, by judging height > width
                         # if box_h > box_w:
-                        cx = box_x + box_w / 2
-                        cy = box_y + box_h / 2
+                        cx = box_x + box_w // 2
+                        cy = box_y + box_h // 2
                         cv2.circle(rgb_img, (cx, cy), 5, (255, 0, 0), -1)
                         cv2.rectangle(rgb_img, (box_x, box_y), (box_x + box_w, box_y + box_h), (0,255,0), 2)
                         break
@@ -197,7 +208,7 @@ class Line:
                 self.y_lower, self.y_upper, self.y_util = self.get_trackbar()
                 cv2.imshow('yellow', yellow_mask)
 
-            # arcuo coordinates
+            # aruco coordinates
             self.line_data.x = cx
             self.line_data.y = cy
 
@@ -205,7 +216,7 @@ class Line:
             self.line_pos_pub.publish(self.line_data)
 
             k = cv2.waitKey(1)
-            # cv2.imshow('line', rgb_img)
+            cv2.imshow('line', rgb_img)
             
             if k == 27 or k == ord('q'):
                 rospy.loginfo('exit')

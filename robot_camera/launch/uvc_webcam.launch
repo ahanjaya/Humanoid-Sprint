@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- center camera -->
+  <node pkg="uvc_camera"     type="uvc_camera_node"   name="uvc_webcam"  >
+    <param name="frame_id"   type="string" value="cam_link" />
+    <param name="device"     type="string" value="/dev/C922" />
+    <param name="width"      type="int"    value="640" />
+    <param name="height"     type="int"    value="480" />
+    <param name="fps"        type="int"    value="30" />
+    <param name="auto_focus" type="bool"   value="False" />
+    <param name="focus_absolute" type="int" value="0" />
+    <param name="auto_white_balance" value="0" />
+    <param name="auto_exposure"      value="0" />
+    <param name="brightness"         value="120" />
+  </node>
+</launch>
